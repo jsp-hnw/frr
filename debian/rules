@@ -66,7 +66,7 @@ override_dh_auto_configure:
 		\
 		--enable-user=frr \
 		--enable-group=frr \
-		--enable-vty-group=frrvty \
+		--enable-vty-group=nfware \
 		--enable-configfile-mask=0640 \
 		--enable-logfile-mask=0640 \
 		# end

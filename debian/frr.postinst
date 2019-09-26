@@ -5,7 +5,7 @@ set -e
 # of normal "configure" or error-handling "abort-upgrade", "abort-remove" or
 # "abort-deconfigure"
 
-addgroup --system frrvty
+addgroup --system nfware
 addgroup --system frr
 adduser \
 	--system \
@@ -14,7 +14,7 @@ adduser \
 	--gecos "Frr routing suite" \
 	--no-create-home \
 	frr
-usermod -a -G frrvty frr
+usermod -a -G nfware frr
 
 mkdir -m 0755 -p /var/log/frr
 mkdir -p /etc/frr
@@ -51,7 +51,7 @@ done
 # fix misconfigured vtysh.conf & frr.conf ownership caused by config save
 # mishandling in earlier FRR (and Quagga) versions
 find /etc/frr -maxdepth 1 \( -name vtysh.conf -o -name frr.conf \) \
-	-group frrvty -exec chgrp frr {} \;
+	-group nfware -exec chgrp frr {} \;
 
 # more Quagga -> FRR upgrade smoothing.  Not technically needed, but let's
 # at least do the straightforward pieces.

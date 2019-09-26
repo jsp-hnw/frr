@@ -4,7 +4,7 @@
         missingok
         compress
         rotate 14
-        create 0640 frr frr
+        create 0640 frr nfware
 
         postrotate
             pid=$(lsof -t -a -c /syslog/ /var/log/frr/* 2>/dev/null)

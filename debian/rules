@@ -69,6 +69,17 @@ override_dh_auto_configure:
 		--enable-vty-group=nfware \
 		--enable-configfile-mask=0640 \
 		--enable-logfile-mask=0640 \
+		\
+		--disable-ldpd \
+		--disable-nhrpd \
+		--disable-eigrpd \
+		--disable-babeld \
+		--disable-pimd \
+		--disable-pim6d \
+		--disable-pbrd \
+		--disable-fabricd \
+		--disable-vrrpd \
+		--disable-pathd \
 		# end
 
 override_dh_auto_install:

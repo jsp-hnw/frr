@@ -1841,11 +1841,10 @@ static struct cmd_node nb_debug_node = {
 
 void nb_cli_install_default(int node)
 {
-	_install_element(node, &show_config_candidate_section_cmd);
-
 	if (frr_get_cli_mode() != FRR_CLI_TRANSACTIONAL)
 		return;
 
+	_install_element(node, &show_config_candidate_section_cmd);
 	_install_element(node, &config_commit_cmd);
 	_install_element(node, &config_commit_comment_cmd);
 	_install_element(node, &config_commit_check_cmd);

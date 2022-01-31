@@ -110,10 +110,16 @@ override_dh_auto_build:
 	dh_auto_build -- $(MAKE_SILENT)
 
 override_dh_installinit:
-	dh_installinit -r
+	dh_installinit -r --no-start --no-enable
 
 override_dh_installsystemd:
-	dh_installsystemd -r
+	dh_installsystemd -r --no-start --no-enable
+
+override_dh_systemd_start:
+	dh_systemd_start -r --no-start
+
+override_dh_systemd_enable:
+	dh_systemd_enable --no-enable
 
 override_dh_makeshlibs:
 	dh_makeshlibs -n

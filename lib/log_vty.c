@@ -25,10 +25,10 @@ DEFINE_HOOK(zlog_cli_show, (struct vty * vty), (vty));
 
 static unsigned logmsgs_with_persist_bt;
 
-static const int log_default_lvl = LOG_DEBUG;
+static const int log_default_lvl = ZLOG_DEFAULT;
 
 static int log_config_stdout_lvl = ZLOG_DISABLED;
-static int log_config_syslog_lvl = ZLOG_DISABLED;
+static int log_config_syslog_lvl = ZLOG_DEFAULT;
 static int log_cmdline_stdout_lvl = ZLOG_DISABLED;
 static int log_cmdline_syslog_lvl = ZLOG_DISABLED;
 
@@ -790,13 +790,10 @@ void log_config_write(struct vty *vty)
 		vty_out(vty, "\n");
 	}
 
-	if (log_config_syslog_lvl != ZLOG_DISABLED) {
-		vty_out(vty, "log syslog");
-
-		if (log_config_syslog_lvl != log_default_lvl)
-			vty_out(vty, " %s",
-				zlog_priority[log_config_syslog_lvl]);
-		vty_out(vty, "\n");
+	if (log_config_syslog_lvl == ZLOG_DISABLED) {
+		vty_out(vty, "no log syslog\n");
+	} else if (log_config_syslog_lvl != log_default_lvl) {
+		vty_out(vty, "log syslog %s\n", zlog_priority[log_config_syslog_lvl]);
 	}
 
 	if (log_cmdline_syslog_lvl != ZLOG_DISABLED) {

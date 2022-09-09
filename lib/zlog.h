@@ -127,6 +127,7 @@ extern void zlog_sigsafe(const char *text, size_t len);
 
 /* extra priority value to disable a target without deleting it */
 #define ZLOG_DISABLED	(LOG_EMERG-1)
+#define ZLOG_DEFAULT    LOG_INFO
 
 /* zlog_msg encapsulates a particular logging call from somewhere in the code.
  * The same struct is passed around to all zlog_targets.

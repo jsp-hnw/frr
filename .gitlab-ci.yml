@@ -27,7 +27,7 @@ build_job:
 publish_job:
     stage: publish
     only:
-      - develop
+      - /^develop/
     script:
       - rm -rf ../aptly
       - git clone https://${CI_REGISTRY_USER}:${CI_JOB_TOKEN}@gitlab.int.nfware.com/devops/aptly ../aptly

@@ -1612,9 +1612,11 @@ static int vty_write_config(struct vty *vty)
 
 	if (strcmp(frr_defaults_version(), FRR_VER_SHORT))
 		vty_out(vty, "! loaded from %s\n", frr_defaults_version());
+	/*
 	vty_out(vty, "frr version %s\n", FRR_VER_SHORT);
 	vty_out(vty, "frr defaults %s\n", frr_defaults_profile());
 	vty_out(vty, "!\n");
+	*/
 
 	for (i = 0; i < vector_active(cmdvec); i++)
 		if ((node = vector_slot(cmdvec, i)) && node->config_write) {

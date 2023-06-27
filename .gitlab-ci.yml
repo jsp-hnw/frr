@@ -1,4 +1,4 @@
-image: registry-gitlab.int.nfware.com/docker/images/ubuntu-nfware:22.04
+image: registry-gitlab.int.nfware.com/docker/images/ubuntu-nfware:22.04-dyn
 
 variables:
   APTLY_PREFIX: nfware

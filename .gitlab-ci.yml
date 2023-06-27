@@ -2,8 +2,8 @@ image: registry-gitlab.int.nfware.com/docker/images/ubuntu-nfware:22.04
 
 variables:
   APTLY_PREFIX: nfware
-  APTLY_DISTR: jammy
-  APTLY_COMPONENT: testing
+  APTLY_DISTR: jammy-6.1-testing
+  APTLY_COMPONENT: main
 
 stages:
   - build

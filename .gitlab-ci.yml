@@ -2,7 +2,7 @@ image: registry-gitlab.int.nfware.com/docker/images/ubuntu-nfware:22.04-dyn
 
 variables:
   APTLY_PREFIX: nfware
-  APTLY_DISTR: jammy-6.1-testing
+  APTLY_DISTR: jammy-6.1
   APTLY_COMPONENT: main
 
 stages:
@@ -28,6 +28,7 @@ publish_job:
     stage: publish
     only:
       - /^develop/
+      - /^publish/
     script:
       - rm -rf ../aptly
       - git clone https://${CI_REGISTRY_USER}:${CI_JOB_TOKEN}@gitlab.int.nfware.com/devops/aptly ../aptly

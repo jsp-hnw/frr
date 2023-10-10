@@ -911,7 +911,7 @@ static void phase_check(void)
 			"Phased restart: all routing daemon stop jobs have completed.");
 		set_phase(PHASE_WAITING_DOWN);
 
-	/*FALLTHRU*/
+		fallthrough;
 	case PHASE_WAITING_DOWN:
 		if (gs.numdown + IS_UP(gs.special) < gs.numdaemons)
 			break;
@@ -921,7 +921,7 @@ static void phase_check(void)
 			1);
 		set_phase(PHASE_ZEBRA_RESTART_PENDING);
 
-	/*FALLTHRU*/
+		fallthrough;
 	case PHASE_ZEBRA_RESTART_PENDING:
 		if (gs.special->restart.pid)
 			break;
@@ -930,7 +930,7 @@ static void phase_check(void)
 			  gs.special->name);
 		set_phase(PHASE_WAITING_ZEBRA_UP);
 
-	/*FALLTHRU*/
+		fallthrough;
 	case PHASE_WAITING_ZEBRA_UP:
 		if (!IS_UP(gs.special))
 			break;

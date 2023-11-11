@@ -527,6 +527,9 @@ void mgmt_vty_init(void)
 	static_vty_init();
 #endif
 
+	extern void dataplane_vty_init(void);
+	dataplane_vty_init();
+
 	event_add_event(mm->master, mgmt_config_read_in, NULL, 0,
 			&mgmt_daemon_info->read_in);
 

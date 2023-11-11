@@ -12,6 +12,7 @@ vtysh_daemons += mgmtd
 
 clippy_scan += \
 	mgmtd/mgmt_vty.c \
+	mgmtd/dataplane_vty.c \
 	# end
 
 lib_LTLIBRARIES += mgmtd/libmgmt_be_nb.la
@@ -31,6 +32,7 @@ mgmtd_libmgmtd_a_SOURCES = \
 	mgmtd/mgmt_memory.c \
 	mgmtd/mgmt_txn.c \
 	mgmtd/mgmt_vty.c \
+	mgmtd/dataplane_vty.c \
 	# end
 
 mgmtdheaderdir = $(pkgincludedir)/mgmtd

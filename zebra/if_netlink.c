@@ -1490,6 +1490,19 @@ int netlink_interface_addr_dplane(struct nlmsghdr *h, ns_id_t ns_id,
 	return 0;
 }
 
+static bool
+is_system_interface(const char *name)
+{
+	if (!strncmp(name, "eno", strlen("eno")) ||
+	    !strncmp(name, "ens", strlen("ens")) ||
+	    !strncmp(name, "enp", strlen("enp")) ||
+	    !strncmp(name, "eth", strlen("eth"))) {
+		return true;
+	}
+
+	return false;
+}
+
 int netlink_link_change(struct nlmsghdr *h, ns_id_t ns_id, int startup)
 {
 	int len;
@@ -1556,6 +1569,9 @@ int netlink_link_change(struct nlmsghdr *h, ns_id_t ns_id, int startup)
 	if (tb[IFLA_IFNAME] == NULL)
 		return -1;
 	name = (char *)RTA_DATA(tb[IFLA_IFNAME]);
+
+	if (is_system_interface(name))
+		return 0;
 
 	/* Must be valid string. */
 	len = RTA_PAYLOAD(tb[IFLA_IFNAME]);

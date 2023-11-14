@@ -1053,18 +1053,11 @@ static int mgmt_txn_prepare_config(struct mgmt_txn_ctx *txn)
 		goto mgmt_txn_prepare_config_done;
 	}
 
-#ifdef MGMTD_LOCAL_VALIDATIONS_ENABLED
-	if (mm->perf_stats_en)
-		gettimeofday(&txn->commit_cfg_req->req.commit_cfg.cmt_stats
-				      ->validate_start,
-			     NULL);
 	/*
 	 * Validate YANG contents of the source DS and get the diff
 	 * between source and destination DS contents.
 	 */
-	char err_buf[1024] = { 0 };
-	nb_ctx.client = NB_CLIENT_MGMTD_SERVER;
-	nb_ctx.user = (void *)txn;
+	char err_buf[BUFSIZ] = { 0 };
 
 	ret = nb_candidate_validate_yang(nb_config, true, err_buf,
 					 sizeof(err_buf) - 1);
@@ -1076,11 +1069,19 @@ static int mgmt_txn_prepare_config(struct mgmt_txn_ctx *txn)
 		ret = -1;
 		goto mgmt_txn_prepare_config_done;
 	}
+
+#ifdef MGMTD_LOCAL_VALIDATIONS_ENABLED
+	if (mm->perf_stats_en)
+		gettimeofday(&txn->commit_cfg_req->req.commit_cfg.cmt_stats
+				      ->validate_start,
+			     NULL);
 	/*
 	 * Perform application level validations locally on the MGMTD
 	 * process by calling application specific validation routines
 	 * loaded onto MGMTD process using libraries.
 	 */
+	nb_ctx.client = NB_CLIENT_MGMTD_SERVER;
+	nb_ctx.user = (void *)txn;
 	ret = nb_candidate_validate_code(&nb_ctx, nb_config, &changes, err_buf,
 					 sizeof(err_buf) - 1);
 	if (ret != NB_OK) {

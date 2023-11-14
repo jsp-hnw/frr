@@ -37,6 +37,7 @@ const char *mgmt_be_client_names[MGMTD_BE_CLIENT_ID_MAX + 1] = {
 #ifdef HAVE_STATICD
 	[MGMTD_BE_CLIENT_ID_STATICD] = "staticd",
 #endif
+	[MGMTD_BE_CLIENT_ID_DATAPLANE] = "dataplane",
 	[MGMTD_BE_CLIENT_ID_MAX] = "Unknown/Invalid",
 };
 
@@ -65,11 +66,17 @@ static const char *const staticd_xpaths[] = {
 };
 #endif
 
+static const char *const dataplane_xpaths[] = {
+	"/nfware-adc:adc",
+	NULL,
+};
+
 static const char *const *be_client_xpaths[MGMTD_BE_CLIENT_ID_MAX] = {
 
 #ifdef HAVE_STATICD
 	[MGMTD_BE_CLIENT_ID_STATICD] = staticd_xpaths,
 #endif
+	[MGMTD_BE_CLIENT_ID_DATAPLANE] = dataplane_xpaths,
 };
 
 static const char *const *be_client_oper_xpaths[MGMTD_BE_CLIENT_ID_MAX] = {};

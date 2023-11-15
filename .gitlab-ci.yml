@@ -29,6 +29,7 @@ publish_job:
     only:
       - /^develop/
       - /^publish/
+      - nfware/9.1
     script:
       - rm -rf ../aptly
       - git clone https://${CI_REGISTRY_USER}:${CI_JOB_TOKEN}@gitlab.int.nfware.com/devops/aptly ../aptly

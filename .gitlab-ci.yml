@@ -2,8 +2,9 @@ image: registry-gitlab.int.nfware.com/docker/images/ubuntu-nfware:22.04-dyn
 
 variables:
   APTLY_PREFIX: nfware
-  APTLY_DISTR: jammy-6.1
+  APTLY_DISTR:  jammy-8.0-testing
   APTLY_COMPONENT: main
+  NFWARE_REPO_VERSION: "8.0"
 
 stages:
   - build
@@ -13,6 +14,7 @@ build_job:
   stage: build
   script:
     - rm -f ../*.deb ../*.ddeb
+    - nfware-repo -a add -v ${NFWARE_REPO_VERSION}
     - apt-get update
     - dch -v "`dpkg-parsechangelog -S Version | sed 's/-0//g'`-${CI_PIPELINE_ID}" -D unstable "Gitlab CI build"
     - mk-build-deps -i -r -t "apt-get --no-install-recommends -y" debian/control

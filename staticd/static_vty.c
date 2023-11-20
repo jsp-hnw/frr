@@ -1233,8 +1233,8 @@ DEFPY_YANG(ipv6_route_vrf, ipv6_route_vrf_cmd,
 	return static_route_nb_run(vty, &args);
 }
 
-void static_cli_show(struct vty *vty, const struct lyd_node *dnode,
-		     bool show_defaults)
+static void static_cli_show(struct vty *vty, const struct lyd_node *dnode,
+			    bool show_defaults)
 {
 	const char *vrf;
 
@@ -1243,7 +1243,7 @@ void static_cli_show(struct vty *vty, const struct lyd_node *dnode,
 		vty_out(vty, "vrf %s\n", vrf);
 }
 
-void static_cli_show_end(struct vty *vty, const struct lyd_node *dnode)
+static void static_cli_show_end(struct vty *vty, const struct lyd_node *dnode)
 {
 	const char *vrf;
 
@@ -1443,8 +1443,9 @@ static void nexthop_cli_show(struct vty *vty, const struct lyd_node *route,
 	vty_out(vty, "\n");
 }
 
-void static_nexthop_cli_show(struct vty *vty, const struct lyd_node *dnode,
-			     bool show_defaults)
+static void static_nexthop_cli_show(struct vty *vty,
+				    const struct lyd_node *dnode,
+				    bool show_defaults)
 {
 	const struct lyd_node *path = yang_dnode_get_parent(dnode, "path-list");
 	const struct lyd_node *route =
@@ -1453,8 +1454,9 @@ void static_nexthop_cli_show(struct vty *vty, const struct lyd_node *dnode,
 	nexthop_cli_show(vty, route, NULL, path, dnode, show_defaults);
 }
 
-void static_src_nexthop_cli_show(struct vty *vty, const struct lyd_node *dnode,
-				 bool show_defaults)
+static void static_src_nexthop_cli_show(struct vty *vty,
+					const struct lyd_node *dnode,
+					bool show_defaults)
 {
 	const struct lyd_node *path = yang_dnode_get_parent(dnode, "path-list");
 	const struct lyd_node *src = yang_dnode_get_parent(path, "src-list");
@@ -1463,8 +1465,8 @@ void static_src_nexthop_cli_show(struct vty *vty, const struct lyd_node *dnode,
 	nexthop_cli_show(vty, route, src, path, dnode, show_defaults);
 }
 
-int static_nexthop_cli_cmp(const struct lyd_node *dnode1,
-			   const struct lyd_node *dnode2)
+static int static_nexthop_cli_cmp(const struct lyd_node *dnode1,
+				  const struct lyd_node *dnode2)
 {
 	enum static_nh_type nh_type1, nh_type2;
 	struct prefix prefix1, prefix2;
@@ -1518,8 +1520,8 @@ int static_nexthop_cli_cmp(const struct lyd_node *dnode1,
 	return if_cmp_name_func(vrf1, vrf2);
 }
 
-int static_route_list_cli_cmp(const struct lyd_node *dnode1,
-			      const struct lyd_node *dnode2)
+static int static_route_list_cli_cmp(const struct lyd_node *dnode1,
+				     const struct lyd_node *dnode2)
 {
 	const char *afi_safi1, *afi_safi2;
 	afi_t afi1, afi2;
@@ -1544,8 +1546,8 @@ int static_route_list_cli_cmp(const struct lyd_node *dnode1,
 	return prefix_cmp(&prefix1, &prefix2);
 }
 
-int static_src_list_cli_cmp(const struct lyd_node *dnode1,
-			    const struct lyd_node *dnode2)
+static int static_src_list_cli_cmp(const struct lyd_node *dnode1,
+				   const struct lyd_node *dnode2)
 {
 	struct prefix prefix1, prefix2;
 
@@ -1555,8 +1557,8 @@ int static_src_list_cli_cmp(const struct lyd_node *dnode1,
 	return prefix_cmp(&prefix1, &prefix2);
 }
 
-int static_path_list_cli_cmp(const struct lyd_node *dnode1,
-			     const struct lyd_node *dnode2)
+static int static_path_list_cli_cmp(const struct lyd_node *dnode1,
+				    const struct lyd_node *dnode2)
 {
 	uint32_t table_id1, table_id2;
 	uint8_t distance1, distance2;
@@ -1624,6 +1626,63 @@ static struct cmd_node debug_node = {
 	.node = DEBUG_NODE,
 	.prompt = "",
 	.config_write = static_config_write_debug,
+};
+
+#else /* ifndef INCLUDE_MGMTD_CMDDEFS_ONLY */
+
+const struct frr_yang_module_info frr_staticd_info = {
+	.name = "frr-staticd",
+	.ignore_cbs = true,
+	.nodes = {
+		{
+			.xpath = "/frr-routing:routing/control-plane-protocols/control-plane-protocol/frr-staticd:staticd",
+			.cbs = {
+				.cli_show = static_cli_show,
+				.cli_show_end = static_cli_show_end,
+			}
+		},
+		{
+			.xpath = "/frr-routing:routing/control-plane-protocols/control-plane-protocol/frr-staticd:staticd/route-list",
+			.cbs = {
+				.cli_cmp = static_route_list_cli_cmp,
+			}
+		},
+		{
+			.xpath = "/frr-routing:routing/control-plane-protocols/control-plane-protocol/frr-staticd:staticd/route-list/path-list",
+			.cbs = {
+				.cli_cmp = static_path_list_cli_cmp,
+			}
+		},
+		{
+			.xpath = "/frr-routing:routing/control-plane-protocols/control-plane-protocol/frr-staticd:staticd/route-list/path-list/frr-nexthops/nexthop",
+			.cbs = {
+				.cli_show = static_nexthop_cli_show,
+				.cli_cmp = static_nexthop_cli_cmp,
+			}
+		},
+		{
+			.xpath = "/frr-routing:routing/control-plane-protocols/control-plane-protocol/frr-staticd:staticd/route-list/src-list",
+			.cbs = {
+				.cli_cmp = static_src_list_cli_cmp,
+			}
+		},
+		{
+			.xpath = "/frr-routing:routing/control-plane-protocols/control-plane-protocol/frr-staticd:staticd/route-list/src-list/path-list",
+			.cbs = {
+				.cli_cmp = static_path_list_cli_cmp,
+			}
+		},
+		{
+			.xpath = "/frr-routing:routing/control-plane-protocols/control-plane-protocol/frr-staticd:staticd/route-list/src-list/path-list/frr-nexthops/nexthop",
+			.cbs = {
+				.cli_show = static_src_nexthop_cli_show,
+				.cli_cmp = static_nexthop_cli_cmp,
+			}
+		},
+		{
+			.xpath = NULL,
+		},
+	}
 };
 
 #endif /* ifndef INCLUDE_MGMTD_CMDDEFS_ONLY */

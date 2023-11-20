@@ -185,6 +185,9 @@ static void mgmt_vrf_terminate(void)
 	vrf_terminate();
 }
 
+#ifdef HAVE_STATICD
+extern const struct frr_yang_module_info frr_staticd_info;
+#endif
 extern struct frr_yang_module_info frr_dataplane_info;
 
 /*
@@ -203,11 +206,10 @@ static const struct frr_yang_module_info *const mgmt_yang_modules[] = {
 /*
  * YANG module info supported by backend clients get added here.
  * NOTE: Always set .ignore_cbs true for to avoid validating
- * backend northbound callbacks during loading.
+ * backend configuration northbound callbacks during loading.
  */
 #ifdef HAVE_STATICD
-	&(struct frr_yang_module_info){.name = "frr-staticd",
-				       .ignore_cbs = true},
+	&frr_staticd_info,
 #endif
 	&frr_dataplane_info,
 };

@@ -70,6 +70,10 @@ RUN apk add \
 		--allow-untrusted /pkgs/apk/*/*.apk \
 	&& rm -rf /pkgs
 
+# humax added 2 lines
+RUN apk add iperf
+COPY docker/alpine/daemons /etc/frr/
+
 # Own the config / PID files
 RUN mkdir -p /var/run/frr
 RUN chown -R frr:frr /etc/frr /var/run/frr

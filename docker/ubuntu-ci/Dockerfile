@@ -87,6 +87,24 @@ RUN groupadd -r -g 92 frr && \
       echo 'frr ALL = NOPASSWD: ALL' | tee /etc/sudoers.d/frr && \
       mkdir -p /home/frr && chown frr.frr /home/frr
 
+#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+RUN mkdir -p /var/log/frr /var/run/frr /etc/frr
+RUN chown -R frr:frr /var/log/frr /var/run/frr
+RUN chown -R frr:frrvty /etc/frr
+
+COPY tools/etc/frr/vtysh.conf /etc/frr/vtysh.conf
+COPY tools/etc/frr/frr.conf /etc/frr/frr.conf
+COPY tools/etc/frr/daemons.conf /etc/frr/daemons.conf
+COPY tools/etc/frr/daemons /etc/frr/daemons
+
+RUN chown frr:frrvty /etc/frr/vtysh.conf
+RUN chown frr:frr /etc/frr/frr.conf
+RUN chown frr:frr /etc/frr/daemons.conf
+RUN chown frr:frr /etc/frr/daemons
+
+RUN apt install -y iperf ssmping vim
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 USER frr:frr
 
 # build and install libyang2
